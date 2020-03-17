@@ -13,6 +13,16 @@
 #include <boost/multi_index/mem_fun.hpp>
 
 
+#include <boost/bimap.hpp>
+#include <boost/bimap/unconstrained_set_of.hpp>
+#include <boost/bimap/multiset_of.hpp>
+#include <boost/bimap/support/lambda.hpp>
+#include <boost/container/stable_vector.hpp>
+
+
+#include <boost/container/vector.hpp>
+
+using namespace boost::container;
 using namespace boost::multi_index;
 
 //BOOST libraries
@@ -46,7 +56,7 @@ using namespace boost::multi_index;
 //Boost.Graph
 //Boost.Signals
 
-//CHAPTER 12 - MUTLI_INDEX_CONTAINER
+//CHAPTER 12 - MULTI_INDEX_CONTAINER
 
 //struct animal
 //{
@@ -317,7 +327,113 @@ using namespace boost::multi_index;
 //}
 
 
-//CHAPTER 13 BIMAP
+//CHAPTER 13 - BIMAP
+
+//INTRO
+//int main()
+//{
+//	typedef boost::bimap<std::string, int> bimap;
+//	bimap animals;
+//
+//	animals.insert({ "cat", 4 });
+//	animals.insert({ "shark", 0 });
+//	animals.insert({ "spider", 8 });
+//
+//	std::cout << animals.left.count("cat") << std::endl;
+//	std::cout << animals.right.count(8) << std::endl;
+//
+//}
+
+//ACCESSING RELATIONS
+
+//int main()
+//{
+//	typedef boost::bimap<std::string, int> bimap;
+//	bimap animals;
+//
+//	animals.insert({ "cat", 4 });
+//	animals.insert({ "shark", 0 });
+//	animals.insert({ "spider", 8 });
+//
+//	for (auto it = animals.begin(); it != animals.end(); it++)
+//	{
+//		std::cout << it->left << " has " << it->right << " legs" << std::endl;
+//	}
+//}
+
+//boost::bimaps::set_of explicitly
+
+//int main()
+//{
+//	typedef boost::bimap<boost::bimaps::set_of<std::string>, boost::bimaps::set_of<int>> bimap;
+//	bimap animals;
+//
+//	animals.insert({ "cat", 4 });
+//	animals.insert({ "shark", 0 });
+//	animals.insert({ "spider", 8 });
+//
+//	std::cout << animals.left.count("spider") << std::endl;
+//	std::cout << animals.right.count(8) << std::endl;
+//}
+
+//boost::bimaps::multiset_of
+//Keys don't need to be unique
+//int main()
+//{
+//	typedef boost::bimap<boost::bimaps::set_of<std::string>, boost::bimaps::multiset_of<int>> bimaps;
+//	bimaps animals;
+//
+//	animals.insert({ "cat", 4 });
+//	animals.insert({ "shark", 0 });
+//	animals.insert({ "dog", 4 });
+//
+//	std::cout << animals.left.count("dog") << std::endl;
+//	std::cout << animals.right.count(4) << std::endl;
+//}
+
+//Disabling one side of the bimap
+//boost::bimaps::unconstrained_set_of
+//int main()
+//{
+//	typedef boost::bimap<std::string, boost::bimaps::unconstrained_set_of<int>> bimap;
+//	bimap animals;
+//
+//	animals.insert({ "cat", 4 });
+//	animals.insert({ "shark", 0 });
+//	animals.insert({ "spider", 8 });
+//
+//	auto it = animals.left.find("cat");
+//	animals.left.modify_key(it, boost::bimaps::_key = "dog");
+//
+//	std::cout << it->first << std::endl;
+//}
 
 
+//Chapter 20 - BOOST.CONTAINER
 
+
+//Recursive containers with Boost.Container
+
+//struct animal
+//{
+//	vector<animal> children;
+//};
+//
+//int main()
+//{
+//	animal parent, child1, child2;
+//	parent.children.push_back(child1);
+//	parent.children.push_back(child2);
+//}
+
+
+//boost::container::stable_vector
+
+int main()
+{
+	stable_vector<int> v(2, 1);
+
+	int& i = v[1];
+	v.erase(v.begin());
+	std::cout << i << std::endl;
+}
