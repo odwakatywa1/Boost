@@ -429,11 +429,22 @@ using namespace boost::multi_index;
 
 //boost::container::stable_vector
 
-int main()
-{
-	stable_vector<int> v(2, 1);
+//int main()
+//{
+//	stable_vector<int> v(2, 1);
+//
+//	int& i = v[1];
+//	v.erase(v.begin());
+//	std::cout << i << std::endl;
+//}
 
-	int& i = v[1];
-	v.erase(v.begin());
-	std::cout << i << std::endl;
-}
+//Other containers provided by Boost::Container
+
+//CHECK
+//boost::container::flat_set
+//boost::container::flat_map
+//boost::container::slist
+//boost::container::static_vector
+
+
+
