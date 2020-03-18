@@ -3,27 +3,33 @@
 #include <iostream>
 
 
-#include <boost/multi_index/member.hpp>
-#include <boost/multi_index/sequenced_index.hpp>
-#include <boost/multi_index/random_access_index.hpp>
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/ordered_index.hpp>
-#include <boost/multi_index/hashed_index.hpp>
-#include <boost/multi_index/identity.hpp>
-#include <boost/multi_index/mem_fun.hpp>
+//#include <boost/multi_index/member.hpp>
+//#include <boost/multi_index/sequenced_index.hpp>
+//#include <boost/multi_index/random_access_index.hpp>
+//#include <boost/multi_index_container.hpp>
+//#include <boost/multi_index/ordered_index.hpp>
+//#include <boost/multi_index/hashed_index.hpp>
+//#include <boost/multi_index/identity.hpp>
+//#include <boost/multi_index/mem_fun.hpp>
+//
+//
+//#include <boost/bimap.hpp>
+//#include <boost/bimap/unconstrained_set_of.hpp>
+//#include <boost/bimap/multiset_of.hpp>
+//#include <boost/bimap/support/lambda.hpp>
+//
+//
+//
+//#include <boost/container/vector.hpp>
+//#include <boost/container/stable_vector.hpp>
 
 
-#include <boost/bimap.hpp>
-#include <boost/bimap/unconstrained_set_of.hpp>
-#include <boost/bimap/multiset_of.hpp>
-#include <boost/bimap/support/lambda.hpp>
-#include <boost/container/stable_vector.hpp>
+#include <boost/intrusive/list.hpp>
 
 
-#include <boost/container/vector.hpp>
-
-using namespace boost::container;
-using namespace boost::multi_index;
+//using namespace boost::multi_index;
+//using namespace boost::container;
+using namespace boost::intrusive;
 
 //BOOST libraries
 
@@ -446,5 +452,231 @@ using namespace boost::multi_index;
 //boost::container::slist
 //boost::container::static_vector
 
+//struct animal
+//{
+//	std::string name;
+//	vector<animal> children;
+//};
+//
+//
+////stable_vector - doesn't invalidate iterators and references
+//stable_vector<animal> animals;
+//
+//
+////flat_set - think sorted vector
+//flat_set<animal> animals2;
 
 
+
+//Boost.Intrusive
+//Containers which don't store copies of objects but original objects
+
+//Lifetime of elements must be managed by user
+//Types must be setup to be used in containers
+//Lots of containers provided
+
+//Intrusive containers don’t allocate memory dynamically.
+//A call to push_back() doesn’t lead to a dynamic allocation with new.
+//This is a one reason why intrusive containers can improve performance.
+
+
+//struct animal : public list_base_hook<>
+//{
+//	std::string name;
+//	animal(const std::string &n)
+//		:name(n)
+//	{
+//
+//	}
+//};
+//
+//int main()
+//{
+//	typedef list<animal> animal_list;
+//
+//	animal_list animals;
+//	animal lion("lion");
+//	animals.push_back(lion);
+//}
+
+
+//struct animal : public list_base_hook<>
+//{
+//	std::string name;
+//	int legs;
+//	animal(std::string n, int l)
+//		:name{ std::move(n) }, legs{ l }
+//	{
+//
+//	}
+//};
+//
+//
+//int main()
+//{
+//	animal a1{ "cat", 4 };
+//	animal a2{ "shark", 0 };
+//	animal a3{ "spider", 8 };
+//
+//	typedef list<animal> animal_list;
+//	animal_list animals;
+//
+//	animals.push_back(a1);
+//	animals.push_back(a2);
+//	animals.push_back(a3);
+//
+//	a1.name = "dog";
+//
+//	for (const animal& a : animals)
+//	{
+//		std::cout << a.name << std::endl;
+//	}
+//}
+
+
+//struct animal : public list_base_hook<>
+//{
+//	std::string name;
+//	int legs;
+//	animal(std::string n, int l)
+//		:name{ std::move(n) }, legs{ l }
+//	{
+//
+//	}
+//};
+//
+//
+//int main()
+//{
+//	animal a1{ "cat", 4 };
+//	animal a2{ "shark", 0 };
+//	animal a3{ "spider", 8 };
+//
+//	typedef list<animal> animal_list;
+//	animal_list animals;
+//
+//	animals.push_back(a1);
+//	animals.push_back(a2);
+//	animals.push_back(a3);
+//
+//	a1.name = "dog";
+//
+//	for (const animal& a : animals)
+//	{
+//		std::cout << a.name << std::endl;
+//	}
+//}
+
+//Removing and destroying dynamically allocated objects
+
+//struct animal : public list_base_hook<>
+//{
+//	std::string name;
+//	int legs;
+//	animal(std::string n, int l)
+//		:name{ std::move(n) }, legs{ l }
+//	{
+//
+//	}
+//};
+//
+////Because intrusive containers don’t store copies, you must remove objects from intrusive containers before you destroy them.
+//
+//int main()
+//{
+//	animal a1{ "cat", 4 };
+//	animal a2{ "shark", 0 };
+//	animal *a3 = new animal{ "spider", 8 };
+//
+//	typedef list<animal> animal_list;
+//	animal_list animals;
+//
+//	animals.push_back(a1);
+//	animals.push_back(a2);
+//	animals.push_back(*a3);
+//
+//	animals.pop_back();
+//	delete a3;
+//
+//	for (const animal& a : animals)
+//	{
+//		std::cout << a.name << std::endl;
+//	}
+//}
+
+//Removing and destroying with pop_back_and_dispose()
+
+//struct animal : public list_base_hook<>
+//{
+//	std::string name;
+//	int legs;
+//	animal(std::string n, int l)
+//		:name{ std::move(n) }, legs{ l }
+//	{
+//
+//	}
+//};
+//
+//int main()
+//{
+//	animal a1{ "cat", 4 };
+//	animal a2{ "shark", 0 };
+//	animal *a3 = new animal{ "spider", 8 };
+//
+//	typedef list<animal> animal_list;
+//	animal_list animals;
+//
+//	animals.push_back(a1);
+//	animals.push_back(a2);
+//	animals.push_back(*a3);
+//
+//	animals.pop_back_and_dispose([](animal* a)
+//		{
+//			delete a;
+//		});
+//	//The other elements in the list haven’t been created with new and, thus, must not be destroyed with delete.
+//
+//	for (const animal& a : animals)
+//	{
+//		std::cout << a.name << std::endl;
+//	}
+//}
+
+
+
+//Removing and destroying with auto unlink mode
+
+struct animal : public list_base_hook<>
+{
+	std::string name;
+	int legs;
+	animal(std::string n, int l)
+		:name{ std::move(n) }, legs{ l }
+	{
+
+	}
+};
+
+int main()
+{
+	animal a1{ "cat", 4 };
+	animal a2{ "shark", 0 };
+	animal* a3 = new animal{ "spider", 8 };
+
+	typedef constant_time_size<false> constant_time_size;
+	typedef list<animal, constant_time_size> animal_list;
+
+	animal_list animals;
+
+	animals.push_back(a1);
+	animals.push_back(a2);
+	animals.push_back(*a3);
+
+	delete a3;
+
+	for (const animal& a : animals)
+	{
+		std::cout << a.name << std::endl;
+	}
+
+}
