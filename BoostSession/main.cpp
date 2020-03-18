@@ -25,6 +25,8 @@
 
 
 #include <boost/intrusive/list.hpp>
+#include <boost/intrusive/set.hpp>
+
 
 
 //using namespace boost::multi_index;
@@ -646,37 +648,91 @@ using namespace boost::intrusive;
 
 //Removing and destroying with auto unlink mode
 
-struct animal : public list_base_hook<>
+
+//The auto unlink mode automatically removes an element from an intrusive container when it is destroyed
+
+//The auto unlink mode can only be used if the member function size(), which is provided by all intrusive containers, 
+//has no constant complexity. By default, it has constant complexity, which means: 
+//the time it takes for size() to return the number of elements doesn’t depend on how many elements are stored in a container. 
+//Switching constant complexity on or off is another option to optimize performance.
+
+//typedef link_mode<auto_unlink> mode;
+//
+//
+//struct animal : public list_base_hook<mode>
+//{
+//	std::string name;
+//	int legs;
+//	animal(std::string n, int l)
+//		:name{ std::move(n) }, legs{ l }
+//	{
+//
+//	}
+//};
+//
+//int main()
+//{
+//	animal a1{ "cat", 4 };
+//	animal a2{ "shark", 0 };
+//	animal* a3 = new animal{ "spider", 8 };
+//
+//	typedef constant_time_size<false> constant_time_size;
+//	typedef list<animal, constant_time_size> animal_list;
+//
+//	animal_list animals;
+//
+//	animals.push_back(a1);
+//	animals.push_back(a2);
+//	animals.push_back(*a3);
+//
+//	delete a3;
+//
+//	for (const animal& a : animals)
+//	{
+//		std::cout << a.name << std::endl;
+//	}
+//}
+
+
+
+
+//Defining a hook for boost::intrusive::set as a member variable
+
+struct animal
 {
 	std::string name;
 	int legs;
+	set_member_hook<> set_hook;
 	animal(std::string n, int l)
 		:name{ std::move(n) }, legs{ l }
 	{
 
 	}
+	bool operator<(const animal& a) const
+	{
+		return legs < a.legs;
+	}
 };
+
 
 int main()
 {
 	animal a1{ "cat", 4 };
 	animal a2{ "shark", 0 };
-	animal* a3 = new animal{ "spider", 8 };
+	animal a3{ "spider", 8 };
 
-	typedef constant_time_size<false> constant_time_size;
-	typedef list<animal, constant_time_size> animal_list;
+	typedef member_hook<animal, set_member_hook<>, &animal::set_hook> hook;
+	typedef set<animal, hook> animal_set;
+	animal_set animals;
 
-	animal_list animals;
-
-	animals.push_back(a1);
-	animals.push_back(a2);
-	animals.push_back(*a3);
-
-	delete a3;
+	animals.insert(a1);
+	animals.insert(a2);
+	animals.insert(a3);
 
 	for (const animal& a : animals)
 	{
 		std::cout << a.name << std::endl;
 	}
+
 
 }
